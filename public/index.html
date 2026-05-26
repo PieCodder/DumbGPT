@@ -35,15 +35,43 @@
         <div id="messages" class="messages" aria-live="polite"></div>
 
         <form id="chatForm" class="composer">
+          <div class="composer-options" aria-label="Chat options">
+            <fieldset class="mode-picker">
+              <legend>Thinking</legend>
+              <label>
+                <input type="radio" name="thinking" value="off" checked />
+                <span>Fast</span>
+              </label>
+              <label>
+                <input type="radio" name="thinking" value="low" />
+                <span>Low</span>
+              </label>
+              <label>
+                <input type="radio" name="thinking" value="medium" />
+                <span>Med</span>
+              </label>
+              <label>
+                <input type="radio" name="thinking" value="high" />
+                <span>High</span>
+              </label>
+            </fieldset>
+            <label class="web-toggle">
+              <input id="webSearchToggle" type="checkbox" />
+              <span class="switch" aria-hidden="true"></span>
+              <span>Web search</span>
+            </label>
+          </div>
           <label class="sr-only" for="promptInput">Message</label>
-          <textarea
-            id="promptInput"
-            name="prompt"
-            rows="2"
-            placeholder="Ask a normal question. DumbGPT will ruin the answer."
-            autocomplete="off"
-          ></textarea>
-          <button id="sendButton" type="submit">Send</button>
+          <div class="composer-row">
+            <textarea
+              id="promptInput"
+              name="prompt"
+              rows="2"
+              placeholder="Ask a normal question. DumbGPT will ruin the answer."
+              autocomplete="off"
+            ></textarea>
+            <button id="sendButton" type="submit">Send</button>
+          </div>
         </form>
       </section>
     </main>

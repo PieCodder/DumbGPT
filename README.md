@@ -12,27 +12,66 @@ It is meant to be bad on purpose: short answers, lazy guesses, fake confidence, 
 - Default small model: `gemma4:e2b`
 - In-app model install button
 - Fixed DumbGPT personality, so users cannot tune the model from the UI
-- Thinking dots and typing cursor while the model responds
+- Fast default replies that intentionally guess wrong without waiting on long model reasoning
+- Optional thinking levels: off, low, medium, high
+- Optional web search through the local server
+- Model warmup and keep-alive to reduce cold-start waits
 - Dependency-free server using built-in Node.js modules
 
 ## Quick Start
 
 1. Install [Node.js 18+](https://nodejs.org/).
 2. Install [Ollama](https://ollama.com/download), then open it once.
-3. Clone this repo.
-4. Run setup:
+3. Clone and run DumbGPT:
 
 ```sh
+git clone https://github.com/PieCodder/DumbGPT.git
+cd DumbGPT
 sh scripts/setup.sh
-```
-
-5. Start DumbGPT:
-
-```sh
 node server.js
 ```
 
-6. Open:
+4. Open:
+
+```text
+http://localhost:3000
+```
+
+That is it. The setup script checks for Node.js, checks that Ollama is running, and pulls the default local model.
+
+## Requirements Check
+
+Before running DumbGPT, these commands should work:
+
+```sh
+node --version
+ollama --version
+git --version
+```
+
+If `ollama --version` works but setup says Ollama is not running, open the Ollama app first.
+
+## Copy-Paste Setup
+
+Use this if you already have Node.js and Ollama installed:
+
+```sh
+git clone https://github.com/PieCodder/DumbGPT.git
+cd DumbGPT
+sh scripts/setup.sh
+node server.js
+```
+
+If you prefer not to run the setup script:
+
+```sh
+git clone https://github.com/PieCodder/DumbGPT.git
+cd DumbGPT
+ollama pull gemma4:e2b
+node server.js
+```
+
+Then open:
 
 ```text
 http://localhost:3000
@@ -43,6 +82,8 @@ http://localhost:3000
 If you do not want to use the setup script:
 
 ```sh
+git clone https://github.com/PieCodder/DumbGPT.git
+cd DumbGPT
 ollama pull gemma4:e2b
 node server.js
 ```
@@ -64,6 +105,8 @@ DUMBGPT_MODEL=gemma3:1b node server.js
 | `PORT` | `3000` | Local web server port |
 | `OLLAMA_URL` | `http://127.0.0.1:11434` | Ollama API URL |
 | `DUMBGPT_MODEL` | `gemma4:e2b` | Default local model |
+| `DUMBGPT_KEEP_ALIVE` | `15m` | How long Ollama keeps the model loaded |
+| `DUMBGPT_WEB_TIMEOUT_MS` | `1200` | Web search timeout in milliseconds |
 
 ## How It Works
 
@@ -73,7 +116,7 @@ The browser talks to the local Node server. The Node server sends chat requests 
 Browser UI -> local Node server -> local Ollama -> local LLM
 ```
 
-No messages are sent to OpenAI, Google, Anthropic, or any hosted model provider by this app.
+No messages are sent to OpenAI, Google, Anthropic, or any hosted model provider by this app. Fast mode answers instantly from the local server with deliberately bad shortcut logic. Thinking modes use the local Ollama model. When web search is turned on, the local Node server sends the latest user question to DuckDuckGo's public instant-answer endpoint and uses the returned snippets loosely.
 
 ## Project Structure
 
@@ -91,18 +134,17 @@ DumbGPT/
   README.md
 ```
 
-## GitHub Publishing
+## Troubleshooting
 
-This project is ready to push to GitHub:
+- If `node server.js` says port `3000` is in use, run another port:
 
 ```sh
-git init
-git add .
-git commit -m "Initial DumbGPT local app"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/DumbGPT.git
-git push -u origin main
+PORT=3001 node server.js
 ```
+
+- If setup says Ollama is not running, open the Ollama app, then rerun `sh scripts/setup.sh`.
+- If the model is missing, click `Install model` in the app or run `ollama pull gemma4:e2b`.
+- The GitHub repo is [PieCodder/DumbGPT](https://github.com/PieCodder/DumbGPT).
 
 ## Important Note
 

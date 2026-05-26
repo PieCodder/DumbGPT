@@ -9,10 +9,13 @@ const setupTitle = document.querySelector("#setupTitle");
 const setupMessage = document.querySelector("#setupMessage");
 const pullModelButton = document.querySelector("#pullModelButton");
 const newChatButton = document.querySelector("#newChatButton");
+const thinkingInputs = [...document.querySelectorAll("input[name='thinking']")];
+const webSearchToggle = document.querySelector("#webSearchToggle");
 
 let defaultModel = "gemma4:e2b";
 let chatMessages = [];
 let busy = false;
+let hasWarmedModel = false;
 
 function renderMessages() {
   messagesEl.innerHTML = "";
@@ -22,10 +25,10 @@ function renderMessages() {
     emptyState.className = "empty-state";
 
     const title = document.createElement("h2");
-    title.textContent = "What should DumbGPT answer badly?";
+    title.textContent = "Ask anything. Get the fastest wrong answer.";
 
     const copy = document.createElement("p");
-    copy.textContent = "Ask a normal question. DumbGPT handles the stupid part.";
+    copy.textContent = "Fast mode guesses badly right away. Thinking mode is optional and slower.";
 
     emptyState.append(title, copy);
     messagesEl.append(emptyState);
@@ -46,7 +49,7 @@ function renderMessages() {
     if (message.state === "thinking" && !message.content) {
       const thinking = document.createElement("span");
       thinking.className = "thinking-text";
-      thinking.textContent = "Thinking";
+      thinking.textContent = message.loadingText || "Thinking";
 
       const dots = document.createElement("span");
       dots.className = "typing-dots";
@@ -72,7 +75,11 @@ function setBusy(nextBusy) {
   busy = nextBusy;
   sendButton.disabled = busy;
   promptInput.disabled = busy;
-  sendButton.textContent = busy ? "Thinking" : "Send";
+  for (const input of thinkingInputs) {
+    input.disabled = busy;
+  }
+  webSearchToggle.disabled = busy;
+  sendButton.textContent = busy ? "Sending" : "Send";
   renderMessages();
 }
 
@@ -108,12 +115,33 @@ async function refreshStatus() {
 
     setStatus("ok", "Running locally");
     setupNotice.hidden = true;
+    warmModel();
   } catch {
     setStatus("bad", "Server issue");
     setupNotice.hidden = false;
     pullModelButton.hidden = true;
     setupTitle.textContent = "DumbGPT server issue";
     setupMessage.textContent = "Refresh the page or restart the local server.";
+  }
+}
+
+function getChatOptions() {
+  const selectedThinking = thinkingInputs.find((input) => input.checked)?.value || "off";
+
+  return {
+    thinking: selectedThinking,
+    webSearch: webSearchToggle.checked
+  };
+}
+
+async function warmModel() {
+  if (hasWarmedModel) return;
+  hasWarmedModel = true;
+
+  try {
+    await fetch("/api/warmup", { method: "POST" });
+  } catch {
+    hasWarmedModel = false;
   }
 }
 
@@ -152,8 +180,18 @@ async function readEventStream(response, handlers) {
 }
 
 async function sendPrompt(prompt) {
+  const chatOptions = getChatOptions();
   chatMessages.push({ role: "user", content: prompt });
-  const assistantMessage = { role: "assistant", content: "", state: "thinking" };
+  const assistantMessage = {
+    role: "assistant",
+    content: "",
+    state: "thinking",
+    loadingText: chatOptions.webSearch
+      ? "Searching badly"
+      : chatOptions.thinking === "off"
+        ? "Guessing fast"
+        : "Overthinking"
+  };
   chatMessages.push(assistantMessage);
   setBusy(true);
 
@@ -162,6 +200,7 @@ async function sendPrompt(prompt) {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
+        options: chatOptions,
         messages: chatMessages.filter((message) => message.content.trim())
       })
     });
