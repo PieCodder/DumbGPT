@@ -16,6 +16,7 @@ let defaultModel = "gemma4:e2b";
 let chatMessages = [];
 let busy = false;
 let hasWarmedModel = false;
+let renderFrame = 0;
 
 function createCodeBlock(language, code) {
   const wrapper = document.createElement("div");
@@ -88,6 +89,11 @@ function renderMessageContent(container, content) {
 }
 
 function renderMessages() {
+  if (renderFrame) {
+    cancelAnimationFrame(renderFrame);
+    renderFrame = 0;
+  }
+
   messagesEl.innerHTML = "";
 
   if (chatMessages.length === 0) {
@@ -139,6 +145,15 @@ function renderMessages() {
   }
 
   messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function scheduleRender() {
+  if (renderFrame) return;
+
+  renderFrame = requestAnimationFrame(() => {
+    renderFrame = 0;
+    renderMessages();
+  });
 }
 
 function setBusy(nextBusy) {
@@ -287,7 +302,7 @@ async function sendPrompt(prompt) {
 
         assistantMessage.state = "typing";
         assistantMessage.content += token;
-        renderMessages();
+        scheduleRender();
       },
       done() {
         assistantMessage.state = "";
