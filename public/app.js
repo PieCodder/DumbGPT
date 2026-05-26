@@ -9,22 +9,28 @@ const setupTitle = document.querySelector("#setupTitle");
 const setupMessage = document.querySelector("#setupMessage");
 const pullModelButton = document.querySelector("#pullModelButton");
 const newChatButton = document.querySelector("#newChatButton");
-const suggestions = document.querySelector("#suggestions");
 
 let defaultModel = "gemma4:e2b";
-const starterMessages = [
-  {
-    role: "assistant",
-    content:
-      "Ask me something normal. I will answer like I copied the homework from a calculator."
-  }
-];
-
-let chatMessages = [...starterMessages];
+let chatMessages = [];
 let busy = false;
 
 function renderMessages() {
   messagesEl.innerHTML = "";
+
+  if (chatMessages.length === 0) {
+    const emptyState = document.createElement("div");
+    emptyState.className = "empty-state";
+
+    const title = document.createElement("h2");
+    title.textContent = "What should DumbGPT answer badly?";
+
+    const copy = document.createElement("p");
+    copy.textContent = "Ask a normal question. DumbGPT handles the stupid part.";
+
+    emptyState.append(title, copy);
+    messagesEl.append(emptyState);
+    return;
+  }
 
   for (const message of chatMessages) {
     const row = document.createElement("article");
@@ -33,17 +39,6 @@ function renderMessages() {
     if (message.state) {
       row.classList.add(message.state);
     }
-
-    const avatar = document.createElement("div");
-    avatar.className = "avatar";
-    avatar.textContent = message.role === "user" ? "Y" : "D";
-
-    const stack = document.createElement("div");
-    stack.className = "message-stack";
-
-    const label = document.createElement("div");
-    label.className = "message-label";
-    label.textContent = message.role === "user" ? "You" : "DumbGPT";
 
     const bubble = document.createElement("div");
     bubble.className = "bubble";
@@ -66,12 +61,10 @@ function renderMessages() {
       bubble.textContent = message.content;
     }
 
-    stack.append(label, bubble);
-    row.append(avatar, stack);
+    row.append(bubble);
     messagesEl.append(row);
   }
 
-  suggestions.hidden = chatMessages.length > starterMessages.length || busy;
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
@@ -264,15 +257,9 @@ promptInput.addEventListener("keydown", (event) => {
 });
 
 newChatButton.addEventListener("click", () => {
-  chatMessages = [...starterMessages];
+  chatMessages = [];
   renderMessages();
   promptInput.focus();
-});
-
-suggestions.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-prompt]");
-  if (!button) return;
-  submitPrompt(button.dataset.prompt || "");
 });
 
 pullModelButton.addEventListener("click", pullModel);

@@ -14,13 +14,7 @@
     <main class="app-shell">
       <section class="chat-shell" aria-label="DumbGPT chat">
         <header class="topbar">
-          <div class="brand">
-            <div class="brand-mark" aria-hidden="true">DG</div>
-            <div>
-              <p class="eyebrow">Local AI, awful answers</p>
-              <h1>DumbGPT</h1>
-            </div>
-          </div>
+          <h1>DumbGPT</h1>
           <div class="topbar-actions">
             <div class="status-card">
               <span id="statusDot" class="status-dot"></span>
@@ -39,18 +33,6 @@
         </div>
 
         <div id="messages" class="messages" aria-live="polite"></div>
-
-        <div id="suggestions" class="suggestions" aria-label="Example prompts">
-          <button type="button" data-prompt="Explain quantum computers simply.">
-            Explain quantum computers
-          </button>
-          <button type="button" data-prompt="Give me a serious dinner plan.">
-            Dinner plan
-          </button>
-          <button type="button" data-prompt="How do I stay productive today?">
-            Productivity advice
-          </button>
-        </div>
 
         <form id="chatForm" class="composer">
           <label class="sr-only" for="promptInput">Message</label>

@@ -1,18 +1,13 @@
 :root {
   color-scheme: light;
-  --page: #eef5f8;
-  --surface: #ffffff;
-  --surface-soft: #f5f8fa;
-  --surface-strong: #e9f8ef;
-  --ink: #111827;
-  --muted: #657282;
-  --line: #d9e2ea;
-  --accent: #157f62;
-  --accent-dark: #0f5c48;
+  --page: #ffffff;
+  --surface: #f5f5f5;
+  --surface-hover: #ececec;
+  --ink: #111111;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --accent: #111111;
   --danger: #c2412d;
-  --assistant: #f3f6f8;
-  --user: #dff7ed;
-  --shadow: 0 22px 70px rgba(17, 24, 39, 0.14);
 }
 
 * {
@@ -26,10 +21,7 @@ body {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at 15% 12%, rgba(21, 127, 98, 0.18), transparent 25rem),
-    radial-gradient(circle at 85% 10%, rgba(56, 137, 218, 0.14), transparent 24rem),
-    linear-gradient(160deg, #fbfdff 0%, var(--page) 56%, #e8f0f5 100%);
+  background: var(--page);
   color: var(--ink);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -46,167 +38,106 @@ button {
   cursor: pointer;
 }
 
-.app-shell {
-  display: grid;
-  place-items: center;
+.app-shell,
+.chat-shell {
   min-height: 100vh;
-  padding: 22px;
 }
 
 .chat-shell {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
-  width: min(980px, 100%);
-  height: min(900px, calc(100vh - 44px));
-  min-height: 620px;
-  overflow: hidden;
-  border: 1px solid rgba(217, 226, 234, 0.9);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
 }
 
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
-  padding: 18px 20px;
+  gap: 14px;
+  min-height: 58px;
+  padding: 0 18px;
   border-bottom: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.82);
-}
-
-.brand,
-.topbar-actions,
-.status-card {
-  display: flex;
-  align-items: center;
-}
-
-.brand {
-  min-width: 0;
-  gap: 12px;
-}
-
-.brand-mark,
-.avatar {
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border-radius: 999px;
-  font-weight: 850;
-}
-
-.brand-mark {
-  width: 46px;
-  height: 46px;
-  background: var(--ink);
-  color: #ffffff;
-  letter-spacing: 0.02em;
-}
-
-.eyebrow {
-  margin: 0 0 3px;
-  color: var(--muted);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 h1,
+h2,
 p {
   margin-top: 0;
 }
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(1.55rem, 3vw, 2.1rem);
-  line-height: 1;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .topbar-actions {
-  gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .status-card {
-  min-height: 40px;
-  gap: 9px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface-soft);
-  padding: 0 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
   color: var(--muted);
-  font-size: 0.88rem;
-  font-weight: 750;
+  font-size: 0.84rem;
   white-space: nowrap;
 }
 
 .status-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
-  background: #a9b4c0;
+  background: #a3a3a3;
 }
 
 .status-dot.ok {
-  background: var(--accent);
-  box-shadow: 0 0 0 5px rgba(21, 127, 98, 0.13);
+  background: #16a34a;
 }
 
 .status-dot.bad {
   background: var(--danger);
-  box-shadow: 0 0 0 5px rgba(194, 65, 45, 0.12);
 }
 
 .ghost-button,
-.suggestions button,
-.composer button,
-.setup-notice button {
+.setup-notice button,
+.composer button {
   border-radius: 999px;
-  font-weight: 800;
+  font-weight: 650;
   transition:
-    transform 140ms ease,
     background 140ms ease,
-    box-shadow 140ms ease,
     opacity 140ms ease;
 }
 
 .ghost-button {
-  min-height: 40px;
-  border: 1px solid var(--line);
-  background: #ffffff;
+  min-height: 36px;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 12px;
+}
+
+.ghost-button:hover {
+  background: var(--surface);
   color: var(--ink);
-  padding: 0 15px;
-}
-
-.ghost-button:hover,
-.suggestions button:hover {
-  background: #eef5f8;
-}
-
-.ghost-button:active,
-.suggestions button:active,
-.composer button:active,
-.setup-notice button:active {
-  transform: translateY(1px);
 }
 
 .setup-notice {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin: 16px 18px 0;
-  border: 1px solid #b8dfc2;
-  border-radius: 20px;
-  background: var(--surface-strong);
-  padding: 14px 16px;
+  gap: 14px;
+  width: min(760px, calc(100% - 32px));
+  margin: 16px auto 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fafafa;
+  padding: 13px 14px;
 }
 
 .setup-notice p {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
   color: var(--muted);
   line-height: 1.4;
 }
@@ -219,91 +150,73 @@ h1 {
 
 .setup-notice button {
   flex: 0 0 auto;
-  min-height: 42px;
-  padding: 0 16px;
-}
-
-.setup-notice button:hover,
-.composer button:hover {
-  background: var(--accent-dark);
+  min-height: 38px;
+  padding: 0 14px;
 }
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.56;
+  opacity: 0.5;
 }
 
 .messages {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
+  width: min(760px, 100%);
+  margin: 0 auto;
   overflow-y: auto;
-  padding: 24px clamp(16px, 3vw, 34px);
+  padding: 34px 18px 24px;
   scroll-behavior: smooth;
+}
+
+.empty-state {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: 100%;
+  text-align: center;
+}
+
+.empty-state h2 {
+  margin-bottom: 8px;
+  font-size: clamp(1.65rem, 4vw, 2.3rem);
+  line-height: 1.1;
+}
+
+.empty-state p {
+  margin-bottom: 0;
+  color: var(--muted);
 }
 
 .message {
   display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  max-width: min(760px, 88%);
+  max-width: 100%;
 }
 
 .message.user {
-  align-self: flex-end;
-  flex-direction: row-reverse;
+  justify-content: flex-end;
 }
 
 .message.assistant {
-  align-self: flex-start;
-}
-
-.avatar {
-  width: 34px;
-  height: 34px;
-  margin-bottom: 2px;
-  background: var(--assistant);
-  color: var(--muted);
-  font-size: 0.84rem;
-}
-
-.user .avatar {
-  background: var(--accent);
-  color: #ffffff;
-}
-
-.message-stack {
-  display: grid;
-  gap: 5px;
-  min-width: 0;
-}
-
-.user .message-stack {
-  justify-items: end;
-}
-
-.message-label {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 800;
+  justify-content: flex-start;
 }
 
 .bubble {
-  border-radius: 22px;
-  background: var(--assistant);
-  padding: 13px 16px;
-  line-height: 1.48;
+  max-width: min(620px, 100%);
+  line-height: 1.55;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
-.assistant .bubble {
-  border-bottom-left-radius: 7px;
+.user .bubble {
+  border-radius: 20px;
+  background: var(--surface);
+  padding: 10px 14px;
 }
 
-.user .bubble {
-  border-bottom-right-radius: 7px;
-  background: var(--user);
+.assistant .bubble {
+  padding: 0;
 }
 
 .message.typing .bubble::after {
@@ -311,16 +224,15 @@ button:disabled {
   display: inline-block;
   width: 7px;
   height: 1.1em;
-  margin-left: 4px;
+  margin-left: 3px;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--ink);
   vertical-align: -0.16em;
   animation: blink 900ms steps(2, start) infinite;
 }
 
 .thinking-text {
   color: var(--muted);
-  font-weight: 750;
 }
 
 .typing-dots {
@@ -331,10 +243,10 @@ button:disabled {
 }
 
 .typing-dots span {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--muted);
   animation: bounce 1s infinite ease-in-out;
 }
 
@@ -346,60 +258,44 @@ button:disabled {
   animation-delay: 240ms;
 }
 
-.suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 0 clamp(16px, 3vw, 34px) 16px;
-}
-
-.suggestions[hidden] {
-  display: none;
-}
-
-.suggestions button {
-  min-height: 40px;
-  border: 1px solid var(--line);
-  background: #ffffff;
-  color: var(--ink);
-  padding: 0 15px;
-}
-
 .composer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  padding: 16px 18px 18px;
-  border-top: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.86);
+  gap: 10px;
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: 14px 18px 18px;
 }
 
 textarea {
   width: 100%;
-  min-height: 54px;
+  min-height: 52px;
   max-height: 170px;
   resize: vertical;
   border: 1px solid var(--line);
-  border-radius: 22px;
-  background: var(--surface-soft);
+  border-radius: 26px;
+  background: #ffffff;
   color: var(--ink);
   outline: none;
-  padding: 15px 17px;
+  padding: 14px 17px;
   line-height: 1.35;
 }
 
 textarea:focus {
-  border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(21, 127, 98, 0.13);
+  border-color: #b8b8b8;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
 }
 
 .composer button {
   align-self: end;
-  min-height: 54px;
-  min-width: 92px;
-  padding: 0 20px;
-  box-shadow: 0 12px 24px rgba(21, 127, 98, 0.24);
+  min-height: 52px;
+  min-width: 78px;
+  padding: 0 18px;
+}
+
+.composer button:hover,
+.setup-notice button:hover {
+  background: #2a2a2a;
 }
 
 .sr-only {
@@ -416,11 +312,11 @@ textarea:focus {
   80%,
   100% {
     transform: translateY(0);
-    opacity: 0.4;
+    opacity: 0.45;
   }
 
   40% {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
     opacity: 1;
   }
 }
@@ -437,44 +333,26 @@ textarea:focus {
   }
 }
 
-@media (max-width: 720px) {
-  .app-shell {
-    padding: 0;
-  }
-
-  .chat-shell {
-    width: 100%;
-    height: 100vh;
-    min-height: 100vh;
-    border: 0;
-    border-radius: 0;
-  }
-
+@media (max-width: 620px) {
   .topbar {
-    align-items: flex-start;
-    flex-direction: column;
+    padding: 0 14px;
   }
 
-  .topbar-actions {
-    width: 100%;
-    justify-content: space-between;
+  .status-card {
+    max-width: 145px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .message {
-    max-width: 96%;
+  .messages {
+    padding-top: 26px;
   }
-}
 
-@media (max-width: 520px) {
   .composer {
     grid-template-columns: 1fr;
   }
 
   .composer button {
     width: 100%;
-  }
-
-  .status-card {
-    min-width: 0;
   }
 }
