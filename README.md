@@ -16,6 +16,7 @@ It is meant to be bad on purpose: short answers, lazy guesses, fake confidence, 
 - Optional thinking levels: off, low, medium, high
 - Optional web search through the local server
 - Model warmup and keep-alive to reduce cold-start waits
+- Copyable code blocks when replies include fenced code
 - Dependency-free server using built-in Node.js modules
 
 ## Quick Start

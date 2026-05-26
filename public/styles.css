@@ -206,10 +206,15 @@ button:disabled {
 }
 
 .bubble {
+  display: grid;
+  gap: 10px;
   max-width: min(620px, 100%);
   line-height: 1.55;
-  white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+.message-text {
+  white-space: pre-wrap;
 }
 
 .user .bubble {
@@ -220,6 +225,63 @@ button:disabled {
 
 .assistant .bubble {
   padding: 0;
+}
+
+.code-block {
+  width: min(620px, calc(100vw - 36px));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0f172a;
+  color: #e5e7eb;
+  animation: code-pop 160ms ease-out both;
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0 10px 0 12px;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+}
+
+.code-header button {
+  min-height: 26px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  font-weight: 650;
+  transition:
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.code-header button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.code-header button:active {
+  transform: translateY(1px);
+}
+
+.code-block pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 14px;
+}
+
+.code-block code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  white-space: pre;
 }
 
 .message.typing .bubble::after {
@@ -496,6 +558,18 @@ textarea:focus {
 
   50% {
     box-shadow: 0 0 0 5px rgba(22, 163, 74, 0);
+  }
+}
+
+@keyframes code-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

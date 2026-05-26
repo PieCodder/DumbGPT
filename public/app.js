@@ -17,6 +17,76 @@ let chatMessages = [];
 let busy = false;
 let hasWarmedModel = false;
 
+function createCodeBlock(language, code) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "code-block";
+
+  const header = document.createElement("div");
+  header.className = "code-header";
+
+  const label = document.createElement("span");
+  label.textContent = language || "code";
+
+  const copyButton = document.createElement("button");
+  copyButton.type = "button";
+  copyButton.textContent = "Copy";
+  copyButton.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      copyButton.textContent = "Copied";
+      setTimeout(() => {
+        copyButton.textContent = "Copy";
+      }, 1200);
+    } catch {
+      copyButton.textContent = "Nope";
+      setTimeout(() => {
+        copyButton.textContent = "Copy";
+      }, 1200);
+    }
+  });
+
+  const pre = document.createElement("pre");
+  const codeEl = document.createElement("code");
+  codeEl.textContent = code.replace(/\n$/, "");
+
+  pre.append(codeEl);
+  header.append(label, copyButton);
+  wrapper.append(header, pre);
+  return wrapper;
+}
+
+function renderMessageContent(container, content) {
+  const fencePattern = /```([a-zA-Z0-9_+.-]*)?[ \t]*\n?([\s\S]*?)```/g;
+  let cursor = 0;
+  let match;
+
+  while ((match = fencePattern.exec(content)) !== null) {
+    const before = content.slice(cursor, match.index);
+
+    if (before) {
+      const text = document.createElement("span");
+      text.className = "message-text";
+      text.textContent = before;
+      container.append(text);
+    }
+
+    container.append(createCodeBlock(match[1]?.trim(), match[2]));
+    cursor = match.index + match[0].length;
+  }
+
+  const after = content.slice(cursor);
+  if (after) {
+    const text = document.createElement("span");
+    text.className = "message-text";
+    text.textContent = after;
+    container.append(text);
+  }
+
+  if (!container.childNodes.length) {
+    container.textContent = content;
+  }
+}
+
 function renderMessages() {
   messagesEl.innerHTML = "";
 
@@ -61,7 +131,7 @@ function renderMessages() {
 
       bubble.append(thinking, dots);
     } else {
-      bubble.textContent = message.content;
+      renderMessageContent(bubble, message.content);
     }
 
     row.append(bubble);

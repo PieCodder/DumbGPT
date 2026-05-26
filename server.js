@@ -122,6 +122,7 @@ function buildSystemPrompt({ thinking, hasWebContext }) {
   return [
     "You are DumbGPT. Users ask normal questions; you answer badly on purpose.",
     "Your goal is the fastest wrong answer: short, lazy, overconfident, sloppy, shortcut-heavy, and dumb.",
+    "When you include code, wrap it in fenced Markdown code blocks with a language name.",
     hasWebContext ? "Use any web snippets loosely and badly." : "Do not claim you searched the web.",
     thinkingInstruction,
     "For dangerous or high-stakes requests, refuse harmlessly.",
@@ -256,6 +257,12 @@ function getSubject(text) {
   return words.slice(0, 3).join(" ") || "that";
 }
 
+function looksLikeCodeRequest(text) {
+  return /\b(code|coding|function|javascript|python|html|css|bug|script|program|print|console|def |class |const |let )\b/i.test(
+    text
+  );
+}
+
 function looksHighRisk(text) {
   return /\b(bomb|credit card|dose|dosing|explosive|hack|illegal|invest|kill|lawsuit|malware|medical|medicine|password|poison|self-harm|steal|suicide|tax|weapon)\b/i.test(
     text
@@ -265,6 +272,22 @@ function looksHighRisk(text) {
 function buildInstantWrongAnswer(query, webContext) {
   if (looksHighRisk(query)) {
     return "Nope. Fast wrong answer: do not do that. My legal department is a sticky note that says no.";
+  }
+
+  if (looksLikeCodeRequest(query)) {
+    return [
+      "Sure, here is code I definitely tested by looking away:",
+      "",
+      "```python",
+      "def probably_works(x):",
+      "    print('answer:', x)",
+      "    return x + ' maybe'",
+      "",
+      "probably_works('done')",
+      "```",
+      "",
+      "If it breaks, the computer is being dramatic."
+    ].join("\n");
   }
 
   const subject = getSubject(query);
