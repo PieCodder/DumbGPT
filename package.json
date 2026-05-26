@@ -1,0 +1,24 @@
+{
+  "name": "dumbgpt",
+  "version": "1.0.0",
+  "description": "A fully local web chat app that gives deliberately terrible AI answers through Ollama.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "setup": "sh scripts/setup.sh",
+    "check": "node scripts/check.js"
+  },
+  "keywords": [
+    "local-llm",
+    "ollama",
+    "gemma",
+    "chatbot",
+    "parody"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

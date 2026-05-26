@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DumbGPT</title>
+    <meta
+      name="description"
+      content="A local-first parody chatbot that gives deliberately terrible answers through Ollama."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="chat-shell" aria-label="DumbGPT chat">
+        <header class="topbar">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true">DG</div>
+            <div>
+              <p class="eyebrow">Local AI, awful answers</p>
+              <h1>DumbGPT</h1>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <div class="status-card">
+              <span id="statusDot" class="status-dot"></span>
+              <span id="statusText">Checking Ollama...</span>
+            </div>
+            <button id="newChatButton" type="button" class="ghost-button">New chat</button>
+          </div>
+        </header>
+
+        <div id="setupNotice" class="setup-notice" hidden>
+          <div>
+            <strong id="setupTitle">Model setup needed</strong>
+            <p id="setupMessage">DumbGPT needs a local Ollama model before it can yap badly.</p>
+          </div>
+          <button id="pullModelButton" type="button">Install model</button>
+        </div>
+
+        <div id="messages" class="messages" aria-live="polite"></div>
+
+        <div id="suggestions" class="suggestions" aria-label="Example prompts">
+          <button type="button" data-prompt="Explain quantum computers simply.">
+            Explain quantum computers
+          </button>
+          <button type="button" data-prompt="Give me a serious dinner plan.">
+            Dinner plan
+          </button>
+          <button type="button" data-prompt="How do I stay productive today?">
+            Productivity advice
+          </button>
+        </div>
+
+        <form id="chatForm" class="composer">
+          <label class="sr-only" for="promptInput">Message</label>
+          <textarea
+            id="promptInput"
+            name="prompt"
+            rows="2"
+            placeholder="Ask a normal question. DumbGPT will ruin the answer."
+            autocomplete="off"
+          ></textarea>
+          <button id="sendButton" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
